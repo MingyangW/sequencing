@@ -12,6 +12,7 @@ import sequencing as sq
 import tensorflow as tf
 from sequencing import TIME_MAJOR, MODE
 from sequencing.utils.metrics import Delta_BLEU
+from sequencing.utils.algebra_ops import LinearOp
 
 
 def optimistic_restore(session, save_file):

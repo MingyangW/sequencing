@@ -17,7 +17,7 @@ from sequencing import MODE, TIME_MAJOR
 
 def build_vocab(vocab_file, embedding_dim, delimiter=' '):
     # construct vocab
-    with open(vocab_file, 'r') as f:
+    with open(vocab_file, 'r', encoding='utf-8') as f:
         symbols = [s[:-1] for s in f.readlines()]
     vocab = sq.Vocab(symbols, embedding_dim, delimiter)
     return vocab
@@ -32,7 +32,7 @@ def build_parallel_inputs(src_vocab, trg_vocab, src_data_file,
     def _parallel_generator():
         read_buffer = deque(maxlen=buffer_size)
         should_stop_read = False
-        with open(src_data_file) as src_data, open(trg_data_file) as trg_data:
+        with open(src_data_file, encoding="utf-8") as src_data, open(trg_data_file, encoding="utf-8") as trg_data:
             while True:
                 if not read_buffer and should_stop_read:
                     # should_stop_read will never be True when TRAIN

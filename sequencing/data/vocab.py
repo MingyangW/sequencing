@@ -21,6 +21,8 @@ class Vocab(object):
         if not vocab_size:
             vocab_size = len(tokens)
         vocab_size = min(vocab_size, len(tokens))
+        #print(tokens)
+        #print(vocab_size)
 
         self.embedding_dim = embedding_dim
         self.delimiter = delimiter
@@ -37,6 +39,7 @@ class Vocab(object):
 
         self.id_to_token_dict = {v: k for k, v in self.token_to_id_dict.items()}
         self.vocab_size = vocab_size + 3
+        #print(self.token_to_id_dict)
         if self.delimiter == '':
             self.space_id = self.token_to_id_dict[' ']
 

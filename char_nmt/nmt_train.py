@@ -12,7 +12,8 @@ from datetime import datetime
 
 import tensorflow as tf
 
-import config
+#import config
+from build_inputs import build_vocab
 from build_inputs import build_parallel_char_inputs
 from build_model import build_attention_model
 from sequencing import MODE, TIME_MAJOR, optimistic_restore
@@ -183,6 +184,33 @@ def train(src_vocab, src_data_file, trg_vocab, trg_data_file,
 
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)
+    train(build_vocab('data/en.txt', 512, ' '),
+          'data/en.tok.shuf.filter',
+          build_vocab('data/zh.txt', 512, ''),
+          'data/zh.tok.shuf.filter',
+          params={'encoder': {'rnn_cell': {'state_size': 1024,
+                                           'cell_name': 'BasicLSTMCell',
+                                           'num_layers': 1,
+                                           'input_keep_prob': 1.0,
+                                           'output_keep_prob': 1.0},
+                              'attention_key_size': 512},
+                  'decoder': {'rnn_cell': {'cell_name': 'BasicLSTMCell',
+                                           'state_size': 1024,
+                                           'num_layers': 1,
+                                           'input_keep_prob': 1.0,
+                                           'output_keep_prob': 1.0},
+                              'logits': {'input_keep_prob': 1.0}}},
+          batch_size=128,
+          max_step=150,
+          train_steps=200000,
+          lr_rate=0.0005,
+          clip_gradient_norm=5,
+          model_dir='models',
+          burn_in_step=50000,
+          increment_step=10000,
+          mode="train")    
+    
+"""
 
     all_configs = [i for i in dir(config) if i.startswith('config_')]
 
@@ -214,3 +242,4 @@ if __name__ == '__main__':
           burn_in_step=training_configs.burn_in_step,
           increment_step=training_configs.increment_step,
           mode=mode)
+"""
